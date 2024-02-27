@@ -1,0 +1,38 @@
+# 1. Import the necessary modules
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# 2. Load the dataset. Find the number of rows and columns. Look for missing values.
+data = pd.read_csv('Hotel_Reviews.csv')  # Replace 'your_dataset.csv' with the actual file name
+print("Number of rows and columns:", data.shape)
+print("Missing values:\n", data.isnull().sum())
+
+# 3. Drop the unnecessary columns
+columns_to_drop = ['Additional_Number_of_Scoring', 'lat', 'lng']
+data = data.drop(columns=columns_to_drop)
+
+# 4. Look for any anomalies in the dataset. Clean the data.
+# You may need to specify the anomalies based on your data analysis.
+
+# 5. Create a correlation heatmap and write the inference.
+correlation_matrix = data.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+
+# 6. Plot the worst top 10 hotels according to the reviewer score
+worst_hotels = data.nsmallest(10, 'Reviewer_Score')
+plt.figure(figsize=(12, 6))
+sns.barplot(x='Reviewer_Score', y='Hotel_Name', data=worst_hotels, palette='Reds')
+plt.title('Top 10 Worst Hotels')
+plt.xlabel('Reviewer Score')
+plt.show()
+
+# Plot the top 10 best hotels according to the reviewer score
+best_hotels = data.nlargest(10, 'Reviewer_Score')
+plt.figure(figsize=(12, 6))
+sns.barplot(x='Reviewer_Score', y='Hotel_Name', data=best_hotels, palette='Greens')
+plt.title('Top 10 Best Hotels')
+plt.xlabel('Reviewer Score')
+plt.show()
